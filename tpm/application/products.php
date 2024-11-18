@@ -754,6 +754,37 @@
 
 <!-- Dentro del contenedor de contenido principal -->
 <div class="pc-content">
+<?php
+
+class obt_product
+{
+  private $apiUrl = 'https://crud.jonathansoto.mx/api/products';
+  private $authToken = '1304|xdmyNvjeWGkj8jCeYq0aRAiwHBAJ0ZHzLV149hbE';
+
+  public function getProduct()
+  {
+    $curl = curl_init();
+    curl_setopt_array($curl, array(
+      CURLOPT_URL => $this->apiUrl,
+      CURLOPT_RETURNTRANSFER => true,
+      CURLOPT_HTTPHEADER => array(
+        'Authorization: Bearer ' . $this->authToken
+      ),
+    ));
+    $response = curl_exec($curl);
+    curl_close($curl);
+    
+    if ($response) {
+      return json_decode($response, true); 
+    } else {
+      return null;
+    }
+  }
+}
+$productObj = new obt_product();
+$productos = $productObj->getProduct();
+?>
+
   <!-- Aquí comienza el bucle para mostrar los productos -->
   <?php if (!empty($productos['data'])): ?>
     <div class="row">
@@ -765,8 +796,10 @@
               <h5 class="card-title"><?= htmlspecialchars($producto['name']) ?></h5>
               <p class="card-text"><?= htmlspecialchars($producto['description']) ?></p>
               <div class="d-flex justify-content-between align-items-center">
-                <span class="text-primary fw-bold">$<?= htmlspecialchars($producto['price']) ?></span>
-                <?php if ($producto['discount'] > 0): ?>
+                <span class="text-primary fw-bold">
+                  $<?= isset($producto['price']) ? htmlspecialchars($producto['price']) : 'N/A' ?>
+                    </span>
+                <?php if (isset($producto['discount']) && $producto['discount'] > 0): ?>
                   <span class="text-muted text-decoration-line-through">$<?= htmlspecialchars($producto['price'] / (1 - $producto['discount'] / 100)) ?></span>
                 <?php endif; ?>
               </div>
