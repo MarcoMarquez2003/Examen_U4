@@ -785,6 +785,28 @@ if (isset($producto['error']) || empty($producto)) {
 
 
   </div>
+        <h1>Detalles del producto</h1>
+        <div class="content">
+            <div class="container mt-5">
+                <div class="row">
+                    <div class="col-md-6 mb-4">
+                        <div class="card">
+                            <img src="<?= htmlspecialchars($producto['data']['cover']) ?>" class="card-img-top"
+                                alt="<?= htmlspecialchars($producto['data']['name']) ?>">
+                            <div class="card-body">
+                                <h5 class="card-title"><?= htmlspecialchars($producto['data']['name']) ?></h5>
+                                <p class="card-text"><?= htmlspecialchars($producto['data']['description']) ?></p>
+                                <h6>Características:</h6>
+                                <p><?= htmlspecialchars($producto['data']['features']) ?></p>
+                                <a href="products.php" class="btn btn-secondary">Volver</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
     <!-- [ Main Content ] end -->
     <footer class="pc-footer">

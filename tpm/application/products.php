@@ -772,6 +772,41 @@
         <a href="agregarProducto.php" class="btn btn-primary">Añadir nuevo producto</a>
       </div>
 
+
+    
+
+<!-- Dentro del contenedor de contenido principal -->
+<div class="pc-content">
+<?php
+
+class obt_product
+{
+  private $apiUrl = 'https://crud.jonathansoto.mx/api/products';
+  private $authToken = '1304|xdmyNvjeWGkj8jCeYq0aRAiwHBAJ0ZHzLV149hbE';
+
+  public function getProduct()
+  {
+    $curl = curl_init();
+    curl_setopt_array($curl, array(
+      CURLOPT_URL => $this->apiUrl,
+      CURLOPT_RETURNTRANSFER => true,
+      CURLOPT_HTTPHEADER => array(
+        'Authorization: Bearer ' . $this->authToken
+      ),
+    ));
+    $response = curl_exec($curl);
+    curl_close($curl);
+    
+    if ($response) {
+      return json_decode($response, true); 
+    } else {
+      return null;
+    }
+  }
+}
+$productObj = new obt_product();
+$productos = $productObj->getProduct();
+?>
       <?php if (!empty($productos['data'])): ?>
         <div class="row">
           <?php foreach ($productos['data'] as $producto): ?>
