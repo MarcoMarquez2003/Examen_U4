@@ -220,9 +220,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_GET['action'])) {
                     'slug' => $_POST['slug'],
                     'description' => $_POST['description'],
                     'features' => $_POST['features'],
-                    'brand_id' => $_POST['brand_id'],
-                    'categories' => $_POST['categories'], // Suponiendo que es un array
-                    'tags' => $_POST['tags'] // Suponiendo que es un array
+                    'cover' => $_FILES['cover']
+                    
+
+                    
                 ];
 
                 $response = $ProductsController->actualizarProducto($id, $datos);
@@ -241,49 +242,3 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_GET['action'])) {
     }
 }
 ?>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-'Authorization: Bearer 273|mxuzNTNtOd6i52UTtphPPRNmpJg6ioS3j5oQgswJ'
