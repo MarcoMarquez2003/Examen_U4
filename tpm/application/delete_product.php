@@ -768,11 +768,6 @@
     $productObj = new obt_product();
     $productos = $productObj->getProduct();
     ?>
-    <div class="pc-content">
-          <div class="mb-4 d-flex justify-content-end">
-            <a href="agregarProducto.php" class="btn btn-primary">Añadir nuevo producto</a>
-          </div>
-    
           <?php if (!empty($productos['data'])): ?>
             <div class="row">
               <?php foreach ($productos['data'] as $producto): ?>

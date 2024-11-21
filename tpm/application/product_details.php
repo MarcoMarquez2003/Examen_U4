@@ -114,7 +114,6 @@ if (isset($producto['error']) || empty($producto)) {
           ></a>
           <ul class="pc-submenu">
             <li class="pc-item"><a class="pc-link" href="../application/products.php">Product</a></li>
-            <li class="pc-item"><a class="pc-link" href="../application/add_product.php">Add Product </a></li>
             <li class="pc-item"><a class="pc-link" href="../application/delete_product.php">Delete Product </a></li>
             <li class="pc-item"><a class="pc-link" href="../application/update_product.php">Update Product</a></li>
           </ul>

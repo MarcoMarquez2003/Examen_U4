@@ -96,7 +96,6 @@
           ></a>
           <ul class="pc-submenu">
             <li class="pc-item"><a class="pc-link" href="../application/products.php">Product</a></li>
-            <li class="pc-item"><a class="pc-link" href="../application/add_product.php">Add Product</a></li>
             <li class="pc-item"><a class="pc-link" href="../application/delete_product.php">Delete Product </a></li>
             <li class="pc-item"><a class="pc-link" href="../application/update_product.php">Update Product</a></li> 
           </ul>
@@ -737,17 +736,76 @@
 
     <!-- [ Main Content ] start -->
 
+    <?php
+session_start();
+require '../../app/ProductsController.php';
+
+$brands = $ProductsController->getbrands();
 
 
+if (!isset($_GET['id'])) {
+    echo "ID de producto no proporcionado.";
+    exit();
+}
+
+$id = $_GET['id'];
+$ProductsController = new ProductsController();
+$productData = json_decode($ProductsController->getproductId($id), true)['data'];
+
+if (!$productData) {
+    echo "Producto no encontrado.";
+    exit();
+}
+?>
 
 
-    <div class="pc-container">
-     
+<div class="pc-container">
 
-    <h1>Aqui se escribe</h1>
+        <div class="pc-content">
 
+
+            <form action="../../app/ProductsController.php?action=update&id=<?= htmlspecialchars($id) ?>" method="POST"
+                enctype="multipart/form-data">
+                <div class="mb-3">
+                    <label for="name" class="form-label">Nombre del Producto:</label>
+                    <input type="text" class="form-control" id="name" name="name"
+                        value="<?= htmlspecialchars($productData['name']) ?>" required>
+                </div>
+                <div class="mb-3">
+                    <label for="slug" class="form-label">Slug:</label>
+                    <input type="text" class="form-control" id="slug" name="slug"
+                        value="<?= htmlspecialchars($productData['slug']) ?>" required>
+                </div>
+                <div class="mb-3">
+                    <label for="description" class="form-label">Descripción:</label>
+                    <textarea class="form-control" id="description" name="description" rows="3"
+                        required><?= htmlspecialchars($productData['description']) ?></textarea>
+                </div>
+                <div class="mb-3">
+                    <label for="features" class="form-label">Características:</label>
+                    <textarea class="form-control" id="features" name="features" rows="3"
+                        required><?= htmlspecialchars($productData['features']) ?></textarea>
+                </div>
+                <div class="mb-3">
+                    <label for="cover" class="form-label">Imagen del Producto:</label>
+                    <input type="file" class="form-control" id="cover" name="cover">
+                    <p>Imagen actual: <?= htmlspecialchars($productData['cover']) ?></p>
+                </div>
+                <div class="mb-3">
+                    <label for="brand" class="form-label">Marca:</label>
+                    <select class="form-control" id="brand" name="brand" required>
+                        <option value="">Selecciona una marca</option>
+                        <?php foreach ($brands['data'] as $marca): ?>
+                            <option value="<?= htmlspecialchars($marca['id']) ?>" <?= $marca['id'] == $productData['brand_id'] ? 'selected' : '' ?>>
+                                <?= htmlspecialchars($marca['name']) ?>
+                            </option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary w-100">Actualizar Producto</button>
+            </form>
+        </div>
     </div>
-
 
 
 
@@ -991,3 +1049,8 @@
   </body>
   <!-- [Body] end -->
 </html>
+
+
+
+
+

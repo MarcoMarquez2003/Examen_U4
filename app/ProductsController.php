@@ -1,5 +1,5 @@
 <?php
-class ProductoController
+class ProductsController
 {
     private $apiUrl = 'https://crud.jonathansoto.mx/api/products';
     private $authHeader = 'Authorization: Bearer 1797|4x5bKd0YNYeohykmKVP6aEWlWbm5zcZTisNQz43e';
@@ -74,7 +74,7 @@ class ProductoController
         return $response;
     }
 
-    public function obtenerMarcas()
+    public function getbrands()
     {
         $curl = curl_init();
         curl_setopt_array($curl, array(
@@ -87,8 +87,7 @@ class ProductoController
             CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
             CURLOPT_CUSTOMREQUEST => 'GET',
             CURLOPT_HTTPHEADER => array(
-                'Authorization: Bearer  1212|LEgAK09G1dXl5s4c9RXZgAgiJqMqadbuo8EV5OvF',
-                'Cookie: XSRF-TOKEN=eyJpdiI6Im5pQzhIZUlYeXI2NDlwS3g3eWtNNWc9PSIsInZhbHVlIjoidmNSVDJ0NmtNVzBiUisvYUdTSGhjVDNORCtQcndRVjR5czU4VGM4T1hDaUVqamR1VG5mYlgwTjdNYW92Y2VhZFZDVmJ3UWNuajdGRmZ2RXpGN2tVT3lKMGxzeXlTWjhJRklBRkRDOW5Xb1NiKy85cnhxYXpCUTV1cTU4bDlFZ2MiLCJtYWMiOiI3OTY3NzM2MTBhYmNmMmJhYzY0OTk5MzMwNDE2MWYxNDZmNDg3NmEzOGFhMzgyMTQwNThkNzNmNGQwNTJhOGI4IiwidGFnIjoiIn0%3D; apicrud_session=eyJpdiI6IjNFNHRudXBVZHpJV0dta2FDQkZYYVE9PSIsInZhbHVlIjoicDVDTGxNQkh4MWMrNjhTNzFObGMxeHovNHJKdE5wdzk4NzB5RW1JSjU4Z09mVXBzTklhYkNzWmZUc1E0cjUvbXdSSFlIellCb3hjeUZqUmZEWHl6dzF1Z0FWbVNRdU5qT1RoYkhsdkRKU0xLWE1EcWNTZjR5Q29SNEZBUEV5VzgiLCJtYWMiOiI3N2NkMjdmZTJkYjlkOGM1MjZmMTQ4MmQ0Y2NiMGY4NzljM2U2NGRlMWQwNDQzNmQwZmIyZTExNjI5NDFiOTI3IiwidGFnIjoiIn0%3D'
+                $this->authHeader
             ),
         ));
 
@@ -97,31 +96,6 @@ class ProductoController
 
         return json_decode($response, true);
     }
-
-    public function actualizarProducto($id, $datos)
-    {
-        $curl = curl_init();
-        curl_setopt_array($curl, array(
-            CURLOPT_URL => "{$this->apiUrl}/{$id}",
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_ENCODING => '',
-            CURLOPT_MAXREDIRS => 10,
-            CURLOPT_TIMEOUT => 0,
-            CURLOPT_FOLLOWLOCATION => true,
-            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-            CURLOPT_CUSTOMREQUEST => 'PUT',
-            CURLOPT_POSTFIELDS => json_encode($datos), 
-            CURLOPT_HTTPHEADER => array(
-                'Content-Type: application/json', 
-                $this->authHeader,
-            ),
-        ));
-        $response = curl_exec($curl);
-        curl_close($curl);
-
-        return $response;
-    }
-
 
     public function eliminarProducto($id)
     {
@@ -158,9 +132,47 @@ class ProductoController
             return false;
         }
     }
+
+    public function actualizarProducto($id, $datos)
+    {
+        $curl = curl_init();
+
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => "{$this->apiUrl}/{$id}",
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => '',
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 0,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => 'PUT',
+            CURLOPT_POSTFIELDS => http_build_query($datos),
+            CURLOPT_HTTPHEADER => array(
+                $this->authHeader,
+                'Content-Type: application/x-www-form-urlencoded'
+            ),
+        ));
+
+        $response = curl_exec($curl);
+
+        if (curl_errno($curl)) {
+            echo 'Error en cURL: ' . curl_error($curl);
+            return false;
+        }
+
+        $httpCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+        curl_close($curl);
+
+        if ($httpCode === 200 || $httpCode === 201) {
+            return $response;
+        } else {
+            echo "Error al actualizar el producto. Código HTTP: $httpCode. Respuesta: $response";
+            return false;
+        }
+    }
 }
 
-$productoController = new ProductoController();
+$ProductsController = new ProductsController();
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_GET['action'])) {
     switch ($_GET['action']) {
@@ -172,11 +184,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_GET['action'])) {
                 'features' => $_POST['features'],
                 'cover' => $_FILES['cover']
             ];
-            $response = $productoController->crearProducto($datos);
+            $response = $ProductsController->crearProducto($datos);
 
             $responseData = json_decode($response, true);
             if (isset($responseData['message']) && $responseData['message'] === 'Registro creado correctamente') {
-                header("Location: /unidad4/examen/tpm/application/ecom_product.php");
+                header("Location: /EXAMEN_U4/tpm/application/products.php");
                 exit();
             } else {
                 echo "Error al crear el producto: " . ($responseData['message'] ?? 'Error desconocido');
@@ -186,11 +198,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_GET['action'])) {
         case 'delete':
             if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id'])) {
                 $id = intval($_POST['id']);
-                $response = $productoController->eliminarProducto($id);
+                $response = $ProductsController->eliminarProducto($id);
 
                 if ($response) {
                     echo "Producto eliminado correctamente.";
-                    header("Location: ../tpm/application/ecom_product.php");
+                    header("Location: ../tpm/application/delete_product.php");
                     exit();
                 } else {
                     echo "Error al eliminar el producto.";
@@ -199,6 +211,79 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_GET['action'])) {
                 echo "ID de producto no proporcionado o método no permitido.";
             }
             break;
+
+        case 'update':
+            if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id'])) {
+                $id = intval($_POST['id']);
+                $datos = [
+                    'name' => $_POST['name'],
+                    'slug' => $_POST['slug'],
+                    'description' => $_POST['description'],
+                    'features' => $_POST['features'],
+                    'brand_id' => $_POST['brand_id'],
+                    'categories' => $_POST['categories'], // Suponiendo que es un array
+                    'tags' => $_POST['tags'] // Suponiendo que es un array
+                ];
+
+                $response = $ProductsController->actualizarProducto($id, $datos);
+
+                $responseData = json_decode($response, true);
+                if (isset($responseData['message']) && $responseData['message'] === 'Producto actualizado correctamente') {
+                    header("Location: /EXAMEN_U4/tpm/application/products.php");
+                    exit();
+                } else {
+                    echo "Error al actualizar el producto: " . ($responseData['message'] ?? 'Error desconocido');
+                }
+            } else {
+                echo "Datos insuficientes o método no permitido.";
+            }
+            break;
     }
 }
 ?>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+'Authorization: Bearer 273|mxuzNTNtOd6i52UTtphPPRNmpJg6ioS3j5oQgswJ'

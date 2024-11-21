@@ -95,7 +95,6 @@
           ></a>
           <ul class="pc-submenu">
             <li class="pc-item"><a class="pc-link" href="../application/products.php">Product</a></li>
-            <li class="pc-item"><a class="pc-link" href="../application/add_product.php">Add Product </a></li>
             <li class="pc-item"><a class="pc-link" href="../application/delete_product.php">Delete Product </a></li>
             <li class="pc-item"><a class="pc-link" href="../application/update_product.php">Update Product</a></li>
           </ul>
@@ -770,6 +769,10 @@ class obt_product
 $productObj = new obt_product();
 $productos = $productObj->getProduct();
 ?>
+<div class="pc-content">
+          <div class="mb-4 d-flex justify-content-end">
+            <a href="add_product.php" class="btn btn-primary">Añadir nuevo producto</a>
+          </div>
       <?php if (!empty($productos['data'])): ?>
         <div class="row">
           <?php foreach ($productos['data'] as $producto): ?>
