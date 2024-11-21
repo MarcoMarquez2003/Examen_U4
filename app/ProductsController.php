@@ -1,5 +1,5 @@
 <?php
-class ProductsController
+class ProductoController
 {
     private $apiUrl = 'https://crud.jonathansoto.mx/api/products';
     private $authHeader = 'Authorization: Bearer 1797|4x5bKd0YNYeohykmKVP6aEWlWbm5zcZTisNQz43e';
@@ -87,7 +87,8 @@ class ProductsController
             CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
             CURLOPT_CUSTOMREQUEST => 'GET',
             CURLOPT_HTTPHEADER => array(
-                'Authorization: Bearer  1797|4x5bKd0YNYeohykmKVP6aEWlWbm5zcZTisNQz43e',
+                'Authorization: Bearer  1212|LEgAK09G1dXl5s4c9RXZgAgiJqMqadbuo8EV5OvF',
+                'Cookie: XSRF-TOKEN=eyJpdiI6Im5pQzhIZUlYeXI2NDlwS3g3eWtNNWc9PSIsInZhbHVlIjoidmNSVDJ0NmtNVzBiUisvYUdTSGhjVDNORCtQcndRVjR5czU4VGM4T1hDaUVqamR1VG5mYlgwTjdNYW92Y2VhZFZDVmJ3UWNuajdGRmZ2RXpGN2tVT3lKMGxzeXlTWjhJRklBRkRDOW5Xb1NiKy85cnhxYXpCUTV1cTU4bDlFZ2MiLCJtYWMiOiI3OTY3NzM2MTBhYmNmMmJhYzY0OTk5MzMwNDE2MWYxNDZmNDg3NmEzOGFhMzgyMTQwNThkNzNmNGQwNTJhOGI4IiwidGFnIjoiIn0%3D; apicrud_session=eyJpdiI6IjNFNHRudXBVZHpJV0dta2FDQkZYYVE9PSIsInZhbHVlIjoicDVDTGxNQkh4MWMrNjhTNzFObGMxeHovNHJKdE5wdzk4NzB5RW1JSjU4Z09mVXBzTklhYkNzWmZUc1E0cjUvbXdSSFlIellCb3hjeUZqUmZEWHl6dzF1Z0FWbVNRdU5qT1RoYkhsdkRKU0xLWE1EcWNTZjR5Q29SNEZBUEV5VzgiLCJtYWMiOiI3N2NkMjdmZTJkYjlkOGM1MjZmMTQ4MmQ0Y2NiMGY4NzljM2U2NGRlMWQwNDQzNmQwZmIyZTExNjI5NDFiOTI3IiwidGFnIjoiIn0%3D'
             ),
         ));
 
@@ -159,7 +160,7 @@ class ProductsController
     }
 }
 
-$productsController = new ProductsController();
+$productoController = new ProductoController();
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_GET['action'])) {
     switch ($_GET['action']) {
@@ -171,11 +172,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_GET['action'])) {
                 'features' => $_POST['features'],
                 'cover' => $_FILES['cover']
             ];
-            $response = $productsController->crearProducto($datos);
+            $response = $productoController->crearProducto($datos);
 
             $responseData = json_decode($response, true);
             if (isset($responseData['message']) && $responseData['message'] === 'Registro creado correctamente') {
-                header("Location: /EXAMEN_U4/tpm/application/products.php");
+                header("Location: /unidad4/examen/tpm/application/ecom_product.php");
                 exit();
             } else {
                 echo "Error al crear el producto: " . ($responseData['message'] ?? 'Error desconocido');
@@ -185,11 +186,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_GET['action'])) {
         case 'delete':
             if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id'])) {
                 $id = intval($_POST['id']);
-                $response = $productsController->eliminarProducto($id);
+                $response = $productoController->eliminarProducto($id);
 
                 if ($response) {
                     echo "Producto eliminado correctamente.";
-                    header("Location: ../tpm/application/products.php");
+                    header("Location: ../tpm/application/ecom_product.php");
                     exit();
                 } else {
                     echo "Error al eliminar el producto.";

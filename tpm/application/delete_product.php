@@ -874,7 +874,6 @@
             </ul>
           </div>
         </div>
-
     <!-- [ Main Content ] end -->
     <footer class="pc-footer">
       <div class="footer-wrapper container-fluid">
