@@ -132,8 +132,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             <span class="pc-mtext">Users</span><span class="pc-arrow"><i data-feather="chevron-right"></i></span
           ></a>
           <ul class="pc-submenu">
-            <li class="pc-item"><a class="pc-link" href="../application/">Alta de usuarios</a></li>
-            <li class="pc-item"><a class="pc-link" href="../application/">Baja de usuarios</a></li>
+            <li class="pc-item"><a class="pc-link" href="../application/user.php">Usuarios</a></li>
           </ul>
         </li>
 

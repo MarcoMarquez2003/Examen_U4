@@ -1,3 +1,10 @@
+<?php
+session_start();
+require_once '../../app/UserController.php';
+
+$UserController = new UserController();
+$User = $UserController->getUser();
+?>
 <!doctype html>
 <html lang="en">
   <!-- [Head] start -->
@@ -13,6 +20,10 @@
       content="Light Able admin and dashboard template offer a variety of UI elements and pages, ensuring your admin panel is both fast and effective."
     />
     <meta name="author" content="phoenixcoded" />
+<!-- Bootstrap CSS -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
+<!-- Bootstrap Icons -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
 
     <!-- [Favicon] icon -->
     <link rel="icon" href="../assets/images/favicon.svg" type="image/x-icon" />
@@ -95,7 +106,7 @@
           <ul class="pc-submenu">
             <li class="pc-item"><a class="pc-link" href="../application/products.php">Product</a></li>
             <li class="pc-item"><a class="pc-link" href="../application/delete_product.php">Delete Product </a></li>
-            <li class="pc-item"><a class="pc-link" href="../application/update_product.php">Update Product</a></li> 
+            <li class="pc-item"><a class="pc-link" href="../application/update_product.php">Update Product</a></li>
           </ul>
         </li>
 
@@ -107,7 +118,8 @@
             <span class="pc-mtext">Users</span><span class="pc-arrow"><i data-feather="chevron-right"></i></span
           ></a>
           <ul class="pc-submenu">
-          <li class="pc-item"><a class="pc-link" href="../application/user.php">Usuarios</a></li>
+            <li class="pc-item"><a class="pc-link" href="../application/">Alta de usuarios</a></li>
+            <li class="pc-item"><a class="pc-link" href="../application/">Baja de usuarios</a></li>
           </ul>
         </li>
 
@@ -135,7 +147,7 @@
           <ul class="pc-submenu">
             <li class="pc-item"><a class="pc-link" href="../application/">CRUD de categorias</a></li>
             <li class="pc-item"><a class="pc-link" href="../application/">CRUD de marcas</a></li>
-            <li class="pc-item"><a class="pc-link" href="../application/">CRUD de tags</a></li>
+            <li class="pc-item"><a class="pc-link" href="../application/>CRUD de tags</a></li>
           </ul>
         </li>
         
@@ -729,68 +741,67 @@
 </header>
 <!-- [ Header ] end -->
 
+
+
     <!-- [ Main Content ] start -->
-    <?php
-require_once '../../app/ProductsController.php';
-
-if (!isset($_GET['id'])) {
-    die("ID del producto no proporcionado.");
-}
-
-$id = intval($_GET['id']);
-
-$ProductsController = new ProductsController();
-$productResponse = $ProductsController->getProductId($id);
-$productData = json_decode($productResponse, true)['data'] ?? null;
-
-if (!$productData) {
-    die("Producto no encontrado.");
-}
-
-$brandsResponse = $ProductsController->getbrands();
-$brandsData = $brandsResponse['data'] ?? [];
-?>
-
-<div class="pc-container">
+    <div class="pc-container">
     <div class="pc-content">
-        <form action="../../app/ProductsController.php?action=update&id=<?= htmlspecialchars($id) ?>" method="POST" enctype="multipart/form-data">
-            <div class="mb-3">
-                <label for="name" class="form-label">Nombre del Producto:</label>
-                <input type="text" class="form-control" id="name" name="name" value="<?= htmlspecialchars($productData['name']) ?>" required>
+        <div class="text-center my-5">
+            <h1 class="display-4 text-primary fw-bold">Gestión de Usuarios</h1>
+        </div>
+
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div>
             </div>
-            <div class="mb-3">
-                <label for="slug" class="form-label">Slug:</label>
-                <input type="text" class="form-control" id="slug" name="slug" value="<?= htmlspecialchars($productData['slug']) ?>" required>
+            <a href="add_client.php" class="btn btn-success btn-lg shadow-sm">
+                <i class="bi bi-person-plus"></i> Añadir Usuario
+            </a>
+        </div>
+
+      <?php if (is_array($User['data']) && count($User['data']) > 0): ?>
+        <table class="table table-bordered">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Nombre</th>
+              <th>Email</th>
+              <th>Teléfono</th>
+              <th>Rol</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            <?php foreach ($User['data'] as $User): ?>
+              <tr>
+                <td><?php echo htmlspecialchars($User['id']); ?></td>
+                <td><?php echo htmlspecialchars($User['name']) . ' ' . htmlspecialchars($User['lastname']); ?></td>
+                <td><?php echo htmlspecialchars($User['email']); ?></td>
+                <td><?php echo htmlspecialchars($User['phone_number'] ?? 'No disponible'); ?></td>
+                <td><?php echo htmlspecialchars($User['role']); ?></td>
+                <td>
+                  <a href="detalle_usuario.php?id=<?php echo $User['id']; ?>"
+                    class="btn btn-info btn-sm me-2 mb-1">Detalles</a>
+                  <a href="modificacion_usuario.php?id=<?php echo $User['id']; ?>"
+                    class="btn btn-warning btn-sm me-2 mb-1">Editar</a>
+                  <a href="../../app/UserController.php?action=delete&id=<?php echo $User['id']; ?>"
+                    class="btn btn-danger btn-sm mb-1"
+                    onclick="return confirm('¿Estás seguro de que deseas eliminar este usuario?');">
+                    Eliminar
+                    </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
             </div>
-            <div class="mb-3">
-                <label for="description" class="form-label">Descripción:</label>
-                <textarea class="form-control" id="description" name="description" rows="3" required><?= htmlspecialchars($productData['description']) ?></textarea>
+        <?php else: ?>
+            <div class="alert alert-warning text-center" role="alert">
+                <i class="bi bi-exclamation-circle"></i> No se encontraron clientes.
             </div>
-            <div class="mb-3">
-                <label for="features" class="form-label">Características:</label>
-                <textarea class="form-control" id="features" name="features" rows="3" required><?= htmlspecialchars($productData['features']) ?></textarea>
-            </div>
-            <div class="mb-3">
-                <label for="cover" class="form-label">Imagen del Producto:</label>
-                <input type="file" class="form-control" id="cover" name="cover">
-                <p>Imagen actual: <img src="<?= htmlspecialchars($productData['cover']) ?>" alt="Imagen actual" style="max-width: 100px;"></p>
-            </div>
-            <div class="mb-3">
-                <label for="brand" class="form-label">Marca:</label>
-                <select class="form-control" id="brand" name="brand" required>
-                    <option value="">Selecciona una marca</option>
-                    <?php foreach ($brandsData as $brand): ?>
-                        <option value="<?= htmlspecialchars($brand['id']) ?>" <?= $brand['id'] == $productData['brand_id'] ? 'selected' : '' ?>>
-                            <?= htmlspecialchars($brand['name']) ?>
-                        </option>
-                    <?php endforeach; ?>
-                </select>
-            </div>
-            <button type="submit" class="btn btn-primary w-100">Actualizar Producto</button>
-        </form>
+        <?php endif; ?>
     </div>
 </div>
-
     <!-- [ Main Content ] end -->
     <footer class="pc-footer">
       <div class="footer-wrapper container-fluid">
@@ -1030,8 +1041,3 @@ $brandsData = $brandsResponse['data'] ?? [];
   </body>
   <!-- [Body] end -->
 </html>
-
-
-
-
-

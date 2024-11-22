@@ -115,7 +115,7 @@ if (isset($_GET['action'])) {
                 if ($ClientController->delete_client($id)) {
                     header("Location: ../tpm/application/client.php");
                 } else {
-                    echo "Error al eliminar el cliente.";
+                    echo "Error al eliminar";
                 }
             } else {
                 echo "ID del cliente no especificado.";
