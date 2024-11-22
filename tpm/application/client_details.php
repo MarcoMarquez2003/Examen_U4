@@ -29,6 +29,10 @@ if (isset($_GET['id'])) {
       content="Light Able admin and dashboard template offer a variety of UI elements and pages, ensuring your admin panel is both fast and effective."
     />
     <meta name="author" content="phoenixcoded" />
+<!-- Bootstrap CSS -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
+<!-- Bootstrap Icons -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
 
     <!-- [Favicon] icon -->
     <link rel="icon" href="../assets/images/favicon.svg" type="image/x-icon" />
@@ -750,38 +754,57 @@ if (isset($_GET['id'])) {
 
     <!-- [ Main Content ] start -->
     <div class="pc-container">
-  <div class="pc-content">
-    <h1 class="text-center text-primary mb-4">Detalles del Cliente</h1>
+    <div class="pc-content">
+        <div class="text-center mb-5">
+            <h1 class="text-primary fw-bold">Detalles del Cliente</h1>
+            <p class="text-muted">Consulta la información detallada de tu cliente.</p>
+        </div>
 
-    <?php if ($client): ?>
-      <div class="card shadow-lg mx-auto" style="max-width: 24rem;">
-        <div class="card-header bg-primary text-white">
-          <h5 class="mb-0 text-center">Información del Cliente</h5>
-        </div>
-        <div class="card-body">
-          <h5 class="card-title text-secondary">Nombre: <?php echo htmlspecialchars($client['name']); ?></h5>
-          <h6 class="card-subtitle mb-2 text-muted">Email: <?php echo htmlspecialchars($client['email']); ?></h6>
-          <p class="card-text">
-            <strong>Número de Teléfono:</strong> <?php echo htmlspecialchars($client['phone_number']); ?>
-          </p>
-          <p class="card-text">
-            <strong>Dirección:</strong> 
-            <?php echo htmlspecialchars($client['address'] ?? 'No disponible'); ?>
-          </p>
-        </div>
-        <div class="card-footer text-center">
-          <a href="client.php" class="btn btn-primary">
-            <i class="bi bi-arrow-left"></i> Volver a la lista
-          </a>
-        </div>
-      </div>
-    <?php else: ?>
-      <div class="alert alert-warning text-center">
-        <i class="bi bi-exclamation-circle"></i> No se encontraron detalles para este cliente.
-      </div>
-    <?php endif; ?>
-  </div>
+        <?php if ($client): ?>
+            <div class="card shadow-lg mx-auto" style="max-width: 28rem; border-radius: 10px;">
+                <div class="card-header bg-primary text-white text-center rounded-top">
+                    <h5 class="mb-0">Información del Cliente</h5>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <h5 class="card-title text-secondary mb-1">
+                            <i class="bi bi-person"></i> Nombre:
+                        </h5>
+                        <p class="fw-bold"><?php echo htmlspecialchars($client['name']); ?></p>
+                    </div>
+                    <div class="mb-3">
+                        <h6 class="card-subtitle text-muted mb-1">
+                            <i class="bi bi-envelope"></i> Email:
+                        </h6>
+                        <p><?php echo htmlspecialchars($client['email']); ?></p>
+                    </div>
+                    <div class="mb-3">
+                        <h6 class="card-text text-muted mb-1">
+                            <i class="bi bi-telephone"></i> Número de Teléfono:
+                        </h6>
+                        <p><?php echo htmlspecialchars($client['phone_number']); ?></p>
+                    </div>
+                    <div class="mb-3">
+                        <h6 class="card-text text-muted mb-1">
+                            <i class="bi bi-geo-alt"></i> Dirección:
+                        </h6>
+                        <p><?php echo htmlspecialchars($client['address'] ?? 'No disponible'); ?></p>
+                    </div>
+                </div>
+                <div class="card-footer bg-light text-center rounded-bottom">
+                    <a href="client.php" class="btn btn-primary shadow-sm">
+                        <i class="bi bi-arrow-left"></i> Volver a la lista
+                    </a>
+                </div>
+            </div>
+        <?php else: ?>
+            <div class="alert alert-warning text-center">
+                <i class="bi bi-exclamation-circle"></i> No se encontraron detalles para este cliente.
+            </div>
+        <?php endif; ?>
+    </div>
 </div>
+
 
     <!-- [ Main Content ] end -->
     <footer class="pc-footer">

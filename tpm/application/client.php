@@ -19,6 +19,10 @@ $clients = $ClientController->getclients();
       content="Light Able admin and dashboard template offer a variety of UI elements and pages, ensuring your admin panel is both fast and effective."
     />
     <meta name="author" content="phoenixcoded" />
+<!-- Bootstrap CSS -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
+<!-- Bootstrap Icons -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
 
     <!-- [Favicon] icon -->
     <link rel="icon" href="../assets/images/favicon.svg" type="image/x-icon" />
@@ -741,48 +745,54 @@ $clients = $ClientController->getclients();
     <!-- [ Main Content ] start -->
     <div class="pc-container">
     <div class="pc-content">
-        <h1 class="mb-4 text-center text-primary">Gestión de Clientes</h1>
+        <!-- Encabezado Principal -->
+        <div class="text-center my-5">
+            <h1 class="display-4 text-primary fw-bold">Gestión de Clientes</h1>
+            <p class="lead text-muted">Administra y visualiza los datos de tus clientes de forma eficiente.</p>
+        </div>
 
-        <!-- Botón para añadir nuevo cliente -->
-        <div class="mb-4 d-flex justify-content-end">
-            <a href="add_client.php" class="btn btn-primary">
-                <i class="bi bi-person-plus"></i> Añadir nuevo Cliente
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div>
+                <p class="text-muted mb-0"><i class="bi bi-info-circle"></i> Aquí puedes ver, editar o eliminar clientes existentes.</p>
+            </div>
+            <a href="add_client.php" class="btn btn-success btn-lg shadow-sm">
+                <i class="bi bi-person-plus"></i> Añadir Cliente
             </a>
         </div>
 
         <?php if (is_array($clients) && count($clients) > 0): ?>
             <div class="table-responsive">
-                <table class="table table-striped table-hover table-bordered align-middle">
+                <table class="table table-striped table-hover align-middle">
                     <thead class="table-dark text-center">
                         <tr>
-                            <th>ID</th>
-                            <th>Nombre</th>
-                            <th>Email</th>
-                            <th>Número de Teléfono</th>
-                            <th>Acciones</th>
+                            <th scope="col">ID</th>
+                            <th scope="col">Nombre</th>
+                            <th scope="col">Email</th>
+                            <th scope="col">Teléfono</th>
+                            <th scope="col">Acciones</th>
                         </tr>
                     </thead>
                     <tbody>
                         <?php foreach ($clients as $client): ?>
                             <tr class="text-center">
-                                <td><?php echo htmlspecialchars($client['id']); ?></td>
+                                <td class="fw-bold"><?php echo htmlspecialchars($client['id']); ?></td>
                                 <td><?php echo htmlspecialchars($client['name']); ?></td>
                                 <td><?php echo htmlspecialchars($client['email']); ?></td>
                                 <td><?php echo htmlspecialchars($client['phone_number']); ?></td>
                                 <td>
-                                    <div class="d-flex justify-content-center flex-wrap gap-2">
+                                    <div class="btn-group" role="group">
                                         <a href="client_details.php?id=<?php echo $client['id']; ?>"
                                            class="btn btn-info btn-sm" title="Ver detalles">
-                                            <i class="bi bi-eye"></i> Detalles
+                                           <i class="bi bi-eye"></i> Detalles
                                         </a>
                                         <a href="client_modificar.php?id=<?php echo $client['id']; ?>"
                                            class="btn btn-warning btn-sm" title="Editar cliente">
-                                            <i class="bi bi-pencil"></i> Editar
+                                           <i class="bi bi-pencil"></i> Editar
                                         </a>
                                         <a href="../../app/ClientController.php?action=delete&id=<?php echo $client['id']; ?>"
                                            class="btn btn-danger btn-sm" title="Eliminar cliente"
                                            onclick="return confirm('¿Estás seguro de que deseas eliminar este cliente?');">
-                                            <i class="bi bi-trash"></i> Eliminar
+                                           <i class="bi bi-trash"></i> Eliminar
                                         </a>
                                     </div>
                                 </td>
@@ -798,7 +808,6 @@ $clients = $ClientController->getclients();
         <?php endif; ?>
     </div>
 </div>
-
 
     <!-- [ Main Content ] end -->
     <footer class="pc-footer">
