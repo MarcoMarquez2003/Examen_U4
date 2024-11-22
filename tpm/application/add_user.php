@@ -1,23 +1,9 @@
 <?php
 session_start();
-require_once '../../app/ClientController.php';
+require_once '../../app/UserController.php';
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-  $name = $_POST['name'];
-  $email = $_POST['email'];
-  $password = $_POST['password'];
-  $phone_number = $_POST['phone_number'];
-
-  $ClientController = new ClientController();
-  $resultado = $ClientController->add_client($name, $email, $password, $phone_number);
-
-  if (strpos($resultado, "Cliente creado con éxito") !== false) {
-    header('Location: client.php');
-    exit;
-  } else {
-    echo $resultado;
-  }
-}
+$UserController = new UserController();
+$User = $UserController->getUser();
 ?>
 <!doctype html>
 <html lang="en">
@@ -757,50 +743,56 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 
     <!-- [ Main Content ] start -->
-    <div class="pc-container">
-    <div class="pc-content">
-        <div class="container mt-5">
-            <div class="row justify-content-center">
-                <div class="col-md-8 col-lg-6">
-                    <div class="card shadow-lg border-0">
-                        <div class="card-header bg-primary text-white text-center">
-                            <h2 class="mb-0">Crear usuario</h2>
+    <div class="container py-5">
+    <!-- Título -->
+    <div class="text-center mb-4">
+        <h1 class="display-5 text-primary fw-bold">Agregar Usuario</h1>
+        <p class="text-muted">Complete el siguiente formulario para registrar un nuevo usuario en el sistema.</p>
+    </div>
+
+    <!-- Formulario -->
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <form action="../../app/userController.php?action=create" method="POST" enctype="multipart/form-data">
+                        <div class="mb-3">
+                            <label for="name" class="form-label">Nombre</label>
+                            <input type="text" class="form-control" id="name" name="name" placeholder="Ingresa el nombre" required>
                         </div>
-                        <div class="card-body">
-                            <form action="add_user.php" method="POST">
-                                <div class="mb-3">
-                                    <label for="name" class="form-label">Nombre del usuario:</label>
-                                    <input type="text" class="form-control" id="name" name="name" placeholder="Escribe el nombre completo" required>
-                                </div>
-                                <div class="mb-3">
-                                    <label for="email" class="form-label">Correo Electrónico:</label>
-                                    <input type="email" class="form-control" id="email" name="email" placeholder="ejemplo@correo.com" required>
-                                </div>
-                                <div class="mb-3">
-                                    <label for="password" class="form-label">Contraseña:</label>
-                                    <input type="password" class="form-control" id="password" name="password" placeholder="Escribe una contraseña segura" required>
-                                </div>
-                                <div class="mb-3">
-                                    <label for="phone_number" class="form-label">Número de Teléfono:</label>
-                                    <input type="text" class="form-control" id="phone_number" name="phone_number" placeholder="1234567890" required>
-                                </div>
-                                <button type="submit" class="btn btn-primary w-100">
-                                    <i class="bi bi-person-plus"></i> Crear usuario
-                                </button>
-                            </form>
+                        <div class="mb-3">
+                            <label for="lastname" class="form-label">Apellido</label>
+                            <input type="text" class="form-control" id="lastname" name="lastname" placeholder="Ingresa el apellido" required>
                         </div>
-                        <div class="card-footer text-center">
-                            <a href="user.php" class="btn btn-secondary">
-                                <i class="bi bi-arrow-left"></i> Volver 
-                            </a>
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Correo Electrónico</label>
+                            <input type="email" class="form-control" id="email" name="email" placeholder="Ingresa el correo electrónico" required>
                         </div>
-                    </div>
+                        <div class="mb-3">
+                            <label for="phone_number" class="form-label">Número de Teléfono</label>
+                            <input type="text" class="form-control" id="phone_number" name="phone_number" placeholder="Ingresa el número de teléfono" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="role" class="form-label">Rol</label>
+                            <select class="form-select" id="role" name="role" required>
+                                <option value="" selected disabled>Selecciona un rol</option>
+                                <option value="admin">Administrador</option>
+                                <option value="editor">Editor</option>
+                                <option value="viewer">Visualizador</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="password" class="form-label">Contraseña</label>
+                            <input type="password" class="form-control" id="password" name="password" placeholder="Ingresa la contraseña" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100">Crear Usuario</button>
+                    </form>
                 </div>
             </div>
         </div>
     </div>
 </div>
-
+  
     <!-- [ Main Content ] end -->
     <footer class="pc-footer">
       <div class="footer-wrapper container-fluid">
