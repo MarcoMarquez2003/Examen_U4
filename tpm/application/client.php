@@ -1,21 +1,8 @@
 <?php
-session_start();
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
+require_once '../../app/ClientController.php';
 
-require '../../app/ProductsController.php';
-
-$productId = isset($_GET['id']) ? intval($_GET['id']) : 0;
-
-$ProductsController = new ProductsController();
-$response = $ProductsController->getProductId($productId);
-$producto = json_decode($response, true);
-
-if (isset($producto['error']) || empty($producto)) {
-  echo "<p>Error: " . htmlspecialchars($producto['error'] ?? 'Producto no encontrado') . "</p>";
-  exit();
-}
+$ClientController = new ClientController();
+$clients = $ClientController->getclients();
 ?>
 <!doctype html>
 <html lang="en">
@@ -157,7 +144,7 @@ if (isset($producto['error']) || empty($producto)) {
           <ul class="pc-submenu">
             <li class="pc-item"><a class="pc-link" href="../application/">CRUD de categorias</a></li>
             <li class="pc-item"><a class="pc-link" href="../application/">CRUD de marcas</a></li>
-            <li class="pc-item"><a class="pc-link" href="../application/">CRUD de tags</a></li>
+            <li class="pc-item"><a class="pc-link" href="../application/>CRUD de tags</a></li>
           </ul>
         </li>
         
@@ -754,30 +741,57 @@ if (isset($producto['error']) || empty($producto)) {
 
 
     <!-- [ Main Content ] start -->
-     
     <div class="pc-container">
-    <div class="pc-content">
-        <h1>Detalles del producto</h1>
-        <div class="content">
-            <div class="container mt-5">
-                <div class="row">
-                    <div class="col-md-6 mb-4">
-                        <div class="card">
-                            <img src="<?= htmlspecialchars($producto['data']['cover']) ?>" class="card-img-top"
-                                alt="<?= htmlspecialchars($producto['data']['name']) ?>">
-                            <div class="card-body">
-                                <h5 class="card-title"><?= htmlspecialchars($producto['data']['name']) ?></h5>
-                                <p class="card-text"><?= htmlspecialchars($producto['data']['description']) ?></p>
-                                <h6>Características:</h6>
-                                <p><?= htmlspecialchars($producto['data']['features']) ?></p>
-                                <a href="products.php" class="btn btn-secondary">Volver</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+  <div class="pc-content">
+    <h1 class="mb-4 text-center text-primary">Gestión de Clientes</h1>
+
+    <?php if (is_array($clients) && count($clients) > 0): ?>
+      <div class="table-responsive">
+        <table class="table table-striped table-hover table-bordered align-middle">
+          <thead class="table-dark text-center">
+            <tr>
+              <th>ID</th>
+              <th>Nombre</th>
+              <th>Email</th>
+              <th>Número de Teléfono</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            <?php foreach ($clients as $client): ?>
+              <tr class="text-center">
+                <td><?php echo htmlspecialchars($client['id']); ?></td>
+                <td><?php echo htmlspecialchars($client['name']); ?></td>
+                <td><?php echo htmlspecialchars($client['email']); ?></td>
+                <td><?php echo htmlspecialchars($client['phone_number']); ?></td>
+                <td>
+                  <div class="d-flex justify-content-center flex-wrap gap-2">
+                    <a href="client_details.php?id=<?php echo $client['id']; ?>"
+                      class="btn btn-info btn-sm" title="Ver detalles">
+                      <i class="bi bi-eye"></i> Detalles
+                    </a>
+                    <a href="client_modificar.php?id=<?php echo $client['id']; ?>"
+                      class="btn btn-warning btn-sm" title="Editar cliente">
+                      <i class="bi bi-pencil"></i> Editar
+                    </a>
+                    <a href="../../app/ClientController.php?action=delete&id=<?php echo $client['id']; ?>"
+                      class="btn btn-danger btn-sm" title="Eliminar cliente"
+                      onclick="return confirm('¿Estás seguro de que deseas eliminar este cliente?');">
+                      <i class="bi bi-trash"></i> Eliminar
+                    </a>
+                  </div>
+                </td>
+              </tr>
+            <?php endforeach; ?>
+          </tbody>
+        </table>
+      </div>
+    <?php else: ?>
+      <div class="alert alert-warning text-center" role="alert">
+        <i class="bi bi-exclamation-circle"></i> No se encontraron clientes.
+      </div>
+    <?php endif; ?>
+  </div>
 </div>
 
     <!-- [ Main Content ] end -->

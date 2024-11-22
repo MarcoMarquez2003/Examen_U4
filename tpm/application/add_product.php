@@ -81,8 +81,9 @@ $brands = $ProductsController->getbrands();
             <span class="pc-mtext">Client</span><span class="pc-arrow"><i data-feather="chevron-right"></i></span
           ></a>
           <ul class="pc-submenu">
-            <li class="pc-item"><a class="pc-link" href="../application/client_alta.php">Alta cliente</a></li>
-            <li class="pc-item"><a class="pc-link" href="../application/client_baja.php">Baja Cliente</a></li>
+          <li class="pc-item"><a class="pc-link" href="../application/client.php">Clientes</a></li>
+            <li class="pc-item"><a class="pc-link" href="../application/">Alta cliente</a></li>
+            <li class="pc-item"><a class="pc-link" href="../application/">Baja Cliente</a></li>
           </ul>
         </li>
       
@@ -100,7 +101,6 @@ $brands = $ProductsController->getbrands();
           ></a>
           <ul class="pc-submenu">
             <li class="pc-item"><a class="pc-link" href="../application/products.php">Product</a></li>
-            <li class="pc-item"><a class="pc-link" href="../application/add_product.php">Add Product</a></li>
             <li class="pc-item"><a class="pc-link" href="../application/delete_product.php">Delete Product </a></li>
             <li class="pc-item"><a class="pc-link" href="../application/update_product.php">Update Product</a></li>
           </ul>
@@ -114,8 +114,8 @@ $brands = $ProductsController->getbrands();
             <span class="pc-mtext">Users</span><span class="pc-arrow"><i data-feather="chevron-right"></i></span
           ></a>
           <ul class="pc-submenu">
-            <li class="pc-item"><a class="pc-link" href="../application/alta_usuarios.php">Alta de usuarios</a></li>
-            <li class="pc-item"><a class="pc-link" href="../application/baja_usuario.php">Baja de usuarios</a></li>
+            <li class="pc-item"><a class="pc-link" href="../application/">Alta de usuarios</a></li>
+            <li class="pc-item"><a class="pc-link" href="../application/">Baja de usuarios</a></li>
           </ul>
         </li>
 
@@ -127,8 +127,8 @@ $brands = $ProductsController->getbrands();
             <span class="pc-mtext">Cupones</span><span class="pc-arrow"><i data-feather="chevron-right"></i></span
           ></a>
           <ul class="pc-submenu">
-            <li class="pc-item"><a class="pc-link" href="../application/alta_cupones.php">Alta de cupones</a></li>
-            <li class="pc-item"><a class="pc-link" href="../application/baja_cupones.php">Baja de cupones</a></li>
+            <li class="pc-item"><a class="pc-link" href="../application/">Alta de cupones</a></li>
+            <li class="pc-item"><a class="pc-link" href="../application/">Baja de cupones</a></li>
           </ul>
         </li>
 
@@ -141,9 +141,9 @@ $brands = $ProductsController->getbrands();
             <span class="pc-mtext">Catalogos</span><span class="pc-arrow"><i data-feather="chevron-right"></i></span
           ></a>
           <ul class="pc-submenu">
-            <li class="pc-item"><a class="pc-link" href="../application/crud_categorias.php">CRUD de categorias</a></li>
-            <li class="pc-item"><a class="pc-link" href="../application/crud_marcas.php">CRUD de marcas</a></li>
-            <li class="pc-item"><a class="pc-link" href="../application/crud_tags.php">CRUD de tags</a></li>
+            <li class="pc-item"><a class="pc-link" href="../application/">CRUD de categorias</a></li>
+            <li class="pc-item"><a class="pc-link" href="../application/">CRUD de marcas</a></li>
+            <li class="pc-item"><a class="pc-link" href="../application/">CRUD de tags</a></li>
           </ul>
         </li>
         
@@ -156,8 +156,8 @@ $brands = $ProductsController->getbrands();
             <span class="pc-mtext">Ordenes</span><span class="pc-arrow"><i data-feather="chevron-right"></i></span
           ></a>
           <ul class="pc-submenu">
-            <li class="pc-item"><a class="pc-link" href="../application/alta_ordenes.php">Alta de ordenes</a></li>
-            <li class="pc-item"><a class="pc-link" href="../application/baja_ordenes.php">Baja de ordenes</a></li>
+            <li class="pc-item"><a class="pc-link" href="../application/">Alta de ordenes</a></li>
+            <li class="pc-item"><a class="pc-link" href="../application/">Baja de ordenes</a></li>
           </ul>
         </li>
 
