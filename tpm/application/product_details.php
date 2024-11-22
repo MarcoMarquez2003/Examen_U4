@@ -96,8 +96,6 @@ if (isset($producto['error']) || empty($producto)) {
           ></a>
           <ul class="pc-submenu">
           <li class="pc-item"><a class="pc-link" href="../application/client.php">Clientes</a></li>
-            <li class="pc-item"><a class="pc-link" href="../application/">Alta cliente</a></li>
-            <li class="pc-item"><a class="pc-link" href="../application/">Baja Cliente</a></li>
           </ul>
         </li>
       

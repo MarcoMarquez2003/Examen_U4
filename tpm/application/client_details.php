@@ -1,8 +1,18 @@
 <?php
 require_once '../../app/ClientController.php';
 
-$ClientController = new ClientController();
-$clients = $ClientController->getclients();
+if (isset($_GET['id'])) {
+    $id = intval($_GET['id']);
+    $clientController = new ClientController();
+    $client = $clientController->client_details($id);
+    if (isset($client['error']) && $client['error']) {
+        echo $client['message'];
+        exit;
+    }
+} else {
+    echo "ID del cliente no especificado.";
+    exit;
+}
 ?>
 <!doctype html>
 <html lang="en">
@@ -740,65 +750,38 @@ $clients = $ClientController->getclients();
 
     <!-- [ Main Content ] start -->
     <div class="pc-container">
-    <div class="pc-content">
-        <h1 class="mb-4 text-center text-primary">Gestión de Clientes</h1>
+  <div class="pc-content">
+    <h1 class="text-center text-primary mb-4">Detalles del Cliente</h1>
 
-        <!-- Botón para añadir nuevo cliente -->
-        <div class="mb-4 d-flex justify-content-end">
-            <a href="add_client.php" class="btn btn-primary">
-                <i class="bi bi-person-plus"></i> Añadir nuevo Cliente
-            </a>
+    <?php if ($client): ?>
+      <div class="card shadow-lg mx-auto" style="max-width: 24rem;">
+        <div class="card-header bg-primary text-white">
+          <h5 class="mb-0 text-center">Información del Cliente</h5>
         </div>
-
-        <?php if (is_array($clients) && count($clients) > 0): ?>
-            <div class="table-responsive">
-                <table class="table table-striped table-hover table-bordered align-middle">
-                    <thead class="table-dark text-center">
-                        <tr>
-                            <th>ID</th>
-                            <th>Nombre</th>
-                            <th>Email</th>
-                            <th>Número de Teléfono</th>
-                            <th>Acciones</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php foreach ($clients as $client): ?>
-                            <tr class="text-center">
-                                <td><?php echo htmlspecialchars($client['id']); ?></td>
-                                <td><?php echo htmlspecialchars($client['name']); ?></td>
-                                <td><?php echo htmlspecialchars($client['email']); ?></td>
-                                <td><?php echo htmlspecialchars($client['phone_number']); ?></td>
-                                <td>
-                                    <div class="d-flex justify-content-center flex-wrap gap-2">
-                                        <a href="client_details.php?id=<?php echo $client['id']; ?>"
-                                           class="btn btn-info btn-sm" title="Ver detalles">
-                                            <i class="bi bi-eye"></i> Detalles
-                                        </a>
-                                        <a href="client_modificar.php?id=<?php echo $client['id']; ?>"
-                                           class="btn btn-warning btn-sm" title="Editar cliente">
-                                            <i class="bi bi-pencil"></i> Editar
-                                        </a>
-                                        <a href="../../app/ClientController.php?action=delete&id=<?php echo $client['id']; ?>"
-                                           class="btn btn-danger btn-sm" title="Eliminar cliente"
-                                           onclick="return confirm('¿Estás seguro de que deseas eliminar este cliente?');">
-                                            <i class="bi bi-trash"></i> Eliminar
-                                        </a>
-                                    </div>
-                                </td>
-                            </tr>
-                        <?php endforeach; ?>
-                    </tbody>
-                </table>
-            </div>
-        <?php else: ?>
-            <div class="alert alert-warning text-center" role="alert">
-                <i class="bi bi-exclamation-circle"></i> No se encontraron clientes.
-            </div>
-        <?php endif; ?>
-    </div>
+        <div class="card-body">
+          <h5 class="card-title text-secondary">Nombre: <?php echo htmlspecialchars($client['name']); ?></h5>
+          <h6 class="card-subtitle mb-2 text-muted">Email: <?php echo htmlspecialchars($client['email']); ?></h6>
+          <p class="card-text">
+            <strong>Número de Teléfono:</strong> <?php echo htmlspecialchars($client['phone_number']); ?>
+          </p>
+          <p class="card-text">
+            <strong>Dirección:</strong> 
+            <?php echo htmlspecialchars($client['address'] ?? 'No disponible'); ?>
+          </p>
+        </div>
+        <div class="card-footer text-center">
+          <a href="client.php" class="btn btn-primary">
+            <i class="bi bi-arrow-left"></i> Volver a la lista
+          </a>
+        </div>
+      </div>
+    <?php else: ?>
+      <div class="alert alert-warning text-center">
+        <i class="bi bi-exclamation-circle"></i> No se encontraron detalles para este cliente.
+      </div>
+    <?php endif; ?>
+  </div>
 </div>
-
 
     <!-- [ Main Content ] end -->
     <footer class="pc-footer">
