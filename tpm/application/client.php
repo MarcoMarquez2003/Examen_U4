@@ -745,15 +745,12 @@ $clients = $ClientController->getclients();
     <!-- [ Main Content ] start -->
     <div class="pc-container">
     <div class="pc-content">
-        <!-- Encabezado Principal -->
         <div class="text-center my-5">
             <h1 class="display-4 text-primary fw-bold">Gestión de Clientes</h1>
-            <p class="lead text-muted">Administra y visualiza los datos de tus clientes de forma eficiente.</p>
         </div>
 
         <div class="d-flex justify-content-between align-items-center mb-4">
             <div>
-                <p class="text-muted mb-0"><i class="bi bi-info-circle"></i> Aquí puedes ver, editar o eliminar clientes existentes.</p>
             </div>
             <a href="add_client.php" class="btn btn-success btn-lg shadow-sm">
                 <i class="bi bi-person-plus"></i> Añadir Cliente
