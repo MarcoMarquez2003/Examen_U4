@@ -5,6 +5,25 @@ class UserController
     private $apiUrl = "https://crud.jonathansoto.mx/api/users";
     private $token = '2165|OAdQbuEmRTdNA9YAv8xzkNt4jLNCDhTKhcBehRfV';
 
+    public function details_user($id)
+    {
+        $curl = curl_init();
+        curl_setopt_array($curl, [
+            CURLOPT_URL => $this->apiUrl . '/' . $id,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_HTTPHEADER => [
+                "Authorization: Bearer $this->token",
+                "Accept: application/json"
+            ],
+        ]);
+
+        $response = curl_exec($curl);
+        $httpCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+        curl_close($curl);
+
+        return $httpCode === 200 ? json_decode($response, true) : false;
+    }
+
     public function getUser()
     {
         $curl = curl_init();

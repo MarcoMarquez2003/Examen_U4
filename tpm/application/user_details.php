@@ -2,9 +2,21 @@
 session_start();
 require_once '../../app/UserController.php';
 
-$UserController = new UserController();
-$User = $UserController->getUser();
+if (isset($_GET['id'])) {
+  $id = $_GET['id'];
+  $UserController = new UserController();
+  $User = $UserController->details_user($id);
+
+  if (!$User || !isset($User['data'])) {
+    echo "<p>Error: No se pudieron obtener los detalles del usuario.</p>";
+    exit;
+  }
+} else {
+  echo "<p>Error: ID de usuario no proporcionado.</p>";
+  exit;
+}
 ?>
+
 <!doctype html>
 <html lang="en">
   <!-- [Head] start -->
@@ -118,8 +130,7 @@ $User = $UserController->getUser();
             <span class="pc-mtext">Users</span><span class="pc-arrow"><i data-feather="chevron-right"></i></span
           ></a>
           <ul class="pc-submenu">
-            <li class="pc-item"><a class="pc-link" href="../application/">Alta de usuarios</a></li>
-            <li class="pc-item"><a class="pc-link" href="../application/">Baja de usuarios</a></li>
+          <li class="pc-item"><a class="pc-link" href="../application/user.php">Usuarios</a></li>
           </ul>
         </li>
 
@@ -744,64 +755,44 @@ $User = $UserController->getUser();
 
 
     <!-- [ Main Content ] start -->
-    <div class="pc-container">
-    <div class="pc-content">
-        <div class="text-center my-5">
-            <h1 class="display-4 text-primary fw-bold">Gestión de Usuarios</h1>
-        </div>
+    <div class="container py-5">
+    <!-- Título -->
+    <div class="text-center mb-5">
+        <h1 class="display-5 text-primary fw-bold">Detalles del Usuario</h1>
+        <p class="text-muted">Información completa sobre el usuario seleccionado</p>
+    </div>
 
-        <div class="d-flex justify-content-between align-items-center mb-4">
-            <div>
-            </div>
-            <a href="add_user.php" class="btn btn-success btn-lg shadow-sm">
-                <i class="bi bi-person-plus"></i> Añadir Usuario
-            </a>
-        </div>
-
-      <?php if (is_array($User['data']) && count($User['data']) > 0): ?>
-        <table class="table table-bordered">
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>Nombre</th>
-              <th>Email</th>
-              <th>Teléfono</th>
-              <th>Rol</th>
-              <th>Acciones</th>
-            </tr>
-          </thead>
-          <tbody>
-            <?php foreach ($User['data'] as $User): ?>
-              <tr>
-                <td><?php echo htmlspecialchars($User['id']); ?></td>
-                <td><?php echo htmlspecialchars($User['name']) . ' ' . htmlspecialchars($User['lastname']); ?></td>
-                <td><?php echo htmlspecialchars($User['email']); ?></td>
-                <td><?php echo htmlspecialchars($User['phone_number'] ?? 'No disponible'); ?></td>
-                <td><?php echo htmlspecialchars($User['role']); ?></td>
-                <td>
-                  <a href="user_details.php?id=<?php echo $User['id']; ?>"
-                    class="btn btn-info btn-sm me-2 mb-1">Detalles</a>
-                  <a href="update_user.php?id=<?php echo $User['id']; ?>"
-                    class="btn btn-warning btn-sm me-2 mb-1">Editar</a>
-                  <a href="../../app/UserController.php?action=delete&id=<?php echo $User['id']; ?>"
-                    class="btn btn-danger btn-sm mb-1"
-                    onclick="return confirm('¿Estás seguro de que deseas eliminar este usuario?');">
-                    Eliminar
+    <!-- Contenido -->
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0"><?= htmlspecialchars($User['data']['name']) . ' ' . htmlspecialchars($User['data']['lastname']) ?></h4>
+                </div>
+                <div class="card-body">
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">
+                            <strong>Email:</strong> <?= htmlspecialchars($User['data']['email']) ?>
+                        </li>
+                        <li class="list-group-item">
+                            <strong>Teléfono:</strong> <?= htmlspecialchars($User['data']['phone_number']) ?? 'No disponible' ?>
+                        </li>
+                        <li class="list-group-item">
+                            <strong>Rol:</strong> <?= htmlspecialchars($User['data']['role']) ?>
+                        </li>
+                    </ul>
+                </div>
+                <div class="card-footer text-center">
+                    <a href="user.php" class="btn btn-secondary">
+                        <i class="bi bi-arrow-left"></i> Volver a la lista de usuarios
                     </a>
-                                    </div>
-                                </td>
-                            </tr>
-                        <?php endforeach; ?>
-                    </tbody>
-                </table>
+                </div>
             </div>
-        <?php else: ?>
-            <div class="alert alert-warning text-center" role="alert">
-                <i class="bi bi-exclamation-circle"></i> No se encontraron clientes.
-            </div>
-        <?php endif; ?>
+        </div>
     </div>
 </div>
+
+
     <!-- [ Main Content ] end -->
     <footer class="pc-footer">
       <div class="footer-wrapper container-fluid">

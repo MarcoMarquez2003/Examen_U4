@@ -1,9 +1,23 @@
 <?php
 session_start();
-require_once '../../app/UserController.php';
+require_once '../../app/ClientController.php';
 
-$UserController = new UserController();
-$User = $UserController->getUser();
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+  $name = $_POST['name'];
+  $email = $_POST['email'];
+  $password = $_POST['password'];
+  $phone_number = $_POST['phone_number'];
+
+  $ClientController = new ClientController();
+  $resultado = $ClientController->add_client($name, $email, $password, $phone_number);
+
+  if (strpos($resultado, "Cliente creado con éxito") !== false) {
+    header('Location: client.php');
+    exit;
+  } else {
+    echo $resultado;
+  }
+}
 ?>
 <!doctype html>
 <html lang="en">
@@ -118,8 +132,7 @@ $User = $UserController->getUser();
             <span class="pc-mtext">Users</span><span class="pc-arrow"><i data-feather="chevron-right"></i></span
           ></a>
           <ul class="pc-submenu">
-            <li class="pc-item"><a class="pc-link" href="../application/">Alta de usuarios</a></li>
-            <li class="pc-item"><a class="pc-link" href="../application/">Baja de usuarios</a></li>
+            <li class="pc-item"><a class="pc-link" href="../application/user.php">Usuarios</a></li>
           </ul>
         </li>
 
@@ -746,62 +759,48 @@ $User = $UserController->getUser();
     <!-- [ Main Content ] start -->
     <div class="pc-container">
     <div class="pc-content">
-        <div class="text-center my-5">
-            <h1 class="display-4 text-primary fw-bold">Gestión de Usuarios</h1>
+        <div class="container mt-5">
+            <div class="row justify-content-center">
+                <div class="col-md-8 col-lg-6">
+                    <div class="card shadow-lg border-0">
+                        <div class="card-header bg-primary text-white text-center">
+                            <h2 class="mb-0">Crear usuario</h2>
+                        </div>
+                        <div class="card-body">
+                            <form action="add_user.php" method="POST">
+                                <div class="mb-3">
+                                    <label for="name" class="form-label">Nombre del usuario:</label>
+                                    <input type="text" class="form-control" id="name" name="name" placeholder="Escribe el nombre completo" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="email" class="form-label">Correo Electrónico:</label>
+                                    <input type="email" class="form-control" id="email" name="email" placeholder="ejemplo@correo.com" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="password" class="form-label">Contraseña:</label>
+                                    <input type="password" class="form-control" id="password" name="password" placeholder="Escribe una contraseña segura" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="phone_number" class="form-label">Número de Teléfono:</label>
+                                    <input type="text" class="form-control" id="phone_number" name="phone_number" placeholder="1234567890" required>
+                                </div>
+                                <button type="submit" class="btn btn-primary w-100">
+                                    <i class="bi bi-person-plus"></i> Crear usuario
+                                </button>
+                            </form>
+                        </div>
+                        <div class="card-footer text-center">
+                            <a href="user.php" class="btn btn-secondary">
+                                <i class="bi bi-arrow-left"></i> Volver 
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-
-        <div class="d-flex justify-content-between align-items-center mb-4">
-            <div>
-            </div>
-            <a href="add_user.php" class="btn btn-success btn-lg shadow-sm">
-                <i class="bi bi-person-plus"></i> Añadir Usuario
-            </a>
-        </div>
-
-      <?php if (is_array($User['data']) && count($User['data']) > 0): ?>
-        <table class="table table-bordered">
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>Nombre</th>
-              <th>Email</th>
-              <th>Teléfono</th>
-              <th>Rol</th>
-              <th>Acciones</th>
-            </tr>
-          </thead>
-          <tbody>
-            <?php foreach ($User['data'] as $User): ?>
-              <tr>
-                <td><?php echo htmlspecialchars($User['id']); ?></td>
-                <td><?php echo htmlspecialchars($User['name']) . ' ' . htmlspecialchars($User['lastname']); ?></td>
-                <td><?php echo htmlspecialchars($User['email']); ?></td>
-                <td><?php echo htmlspecialchars($User['phone_number'] ?? 'No disponible'); ?></td>
-                <td><?php echo htmlspecialchars($User['role']); ?></td>
-                <td>
-                  <a href="user_details.php?id=<?php echo $User['id']; ?>"
-                    class="btn btn-info btn-sm me-2 mb-1">Detalles</a>
-                  <a href="update_user.php?id=<?php echo $User['id']; ?>"
-                    class="btn btn-warning btn-sm me-2 mb-1">Editar</a>
-                  <a href="../../app/UserController.php?action=delete&id=<?php echo $User['id']; ?>"
-                    class="btn btn-danger btn-sm mb-1"
-                    onclick="return confirm('¿Estás seguro de que deseas eliminar este usuario?');">
-                    Eliminar
-                    </a>
-                                    </div>
-                                </td>
-                            </tr>
-                        <?php endforeach; ?>
-                    </tbody>
-                </table>
-            </div>
-        <?php else: ?>
-            <div class="alert alert-warning text-center" role="alert">
-                <i class="bi bi-exclamation-circle"></i> No se encontraron clientes.
-            </div>
-        <?php endif; ?>
     </div>
 </div>
+
     <!-- [ Main Content ] end -->
     <footer class="pc-footer">
       <div class="footer-wrapper container-fluid">
