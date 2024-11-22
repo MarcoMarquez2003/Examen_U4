@@ -1,8 +1,16 @@
 <?php
-require_once '../../app/ClientController.php';
 
-$ClientController = new ClientController();
-$clients = $ClientController->getclients();
+session_start();
+
+require_once '../../app/CouponController.php';
+
+$CouponController = new CouponController();
+$Coupon = $CouponController->getcoupon();
+
+if (!$Coupon || !isset($Coupon['data'])) {
+  echo "<h2>No se encontraron cupones</h2>";
+  exit;
+}
 ?>
 <!doctype html>
 <html lang="en">
@@ -117,7 +125,7 @@ $clients = $ClientController->getclients();
             <span class="pc-mtext">Users</span><span class="pc-arrow"><i data-feather="chevron-right"></i></span
           ></a>
           <ul class="pc-submenu">
-          <li class="pc-item"><a class="pc-link" href="../application/user.php">Usuarios</a></li>
+            <li class="pc-item"><a class="pc-link" href="../application/user.php">Usuarios</a></li>
           </ul>
         </li>
 
@@ -130,6 +138,7 @@ $clients = $ClientController->getclients();
           ></a>
           <ul class="pc-submenu">
           <li class="pc-item"><a class="pc-link" href="../application/coupon.php">Cupones</a></li>
+
           </ul>
         </li>
 
@@ -739,68 +748,58 @@ $clients = $ClientController->getclients();
 <!-- [ Header ] end -->
 
 
-
     <!-- [ Main Content ] start -->
     <div class="pc-container">
     <div class="pc-content">
-        <div class="text-center my-5">
-            <h1 class="display-4 text-primary fw-bold">Gestión de Clientes</h1>
-        </div>
+    <div class="container-fluid">
+    <div class="row">
+        <!-- Contenido principal -->
+        <div class="col-md-9 col-lg-10 offset-md-3 offset-lg-2">
+            <div class="py-5">
+                <!-- Título -->
+                <div class="text-center mb-5">
+                    <h1 class="display-5 text-primary fw-bold">Consulta de Cupones</h1>
+                    <p class="text-muted">Administra y consulta los cupones disponibles en el sistema.</p>
+                </div>
 
-        <div class="d-flex justify-content-between align-items-center mb-4">
-            <div>
-            </div>
-            <a href="add_client.php" class="btn btn-success btn-lg shadow-sm">
-                <i class="bi bi-person-plus"></i> Añadir Cliente
-            </a>
-        </div>
-
-        <?php if (is_array($clients) && count($clients) > 0): ?>
-            <div class="table-responsive">
-                <table class="table table-striped table-hover align-middle">
-                    <thead class="table-dark text-center">
-                        <tr>
-                            <th scope="col">ID</th>
-                            <th scope="col">Nombre</th>
-                            <th scope="col">Email</th>
-                            <th scope="col">Teléfono</th>
-                            <th scope="col">Acciones</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php foreach ($clients as $client): ?>
-                            <tr class="text-center">
-                                <td class="fw-bold"><?php echo htmlspecialchars($client['id']); ?></td>
-                                <td><?php echo htmlspecialchars($client['name']); ?></td>
-                                <td><?php echo htmlspecialchars($client['email']); ?></td>
-                                <td><?php echo htmlspecialchars($client['phone_number']); ?></td>
-                                <td>
-                                    <div class="btn-group" role="group">
-                                        <a href="client_details.php?id=<?php echo $client['id']; ?>"
-                                           class="btn btn-info btn-sm" title="Ver detalles">
+                <div class="row row-cols-1 row-cols-md-3 g-4">
+                    <?php foreach ($Coupon['data'] as $Coupon): ?>
+                        <div class="col">
+                            <div class="card shadow-sm border-0 h-100">
+                                <div class="card-body p-3">
+                                    <h6 class="card-title text-primary fw-bold"><?= htmlspecialchars($Coupon['name']) ?></h6>
+                                    <p class="mb-1"><strong>Código:</strong> <?= htmlspecialchars($Coupon['code']) ?></p>
+                                    <p class="mb-1"><strong>Descuento:</strong> <?= htmlspecialchars($Coupon['percentage_discount']) ?>%</p>
+                                    <p class="mb-2"><strong>Estado:</strong> 
+                                        <span class="badge <?= $Coupon['status'] == 1 ? 'bg-success' : 'bg-danger' ?>">
+                                            <?= $Coupon['status'] == 1 ? 'Activo' : 'Inactivo' ?>
+                                        </span>
+                                    </p>
+                                    <div class="d-flex justify-content-between">
+                                        <a href="/EXAMEN_U4/tpm/application/coupon_details.php?action=details&id=<?= $Coupon['id'] ?>" 
+                                           class="btn btn-info btn-sm">
                                            <i class="bi bi-eye"></i> Detalles
                                         </a>
-                                        <a href="client_modificar.php?id=<?php echo $client['id']; ?>"
-                                           class="btn btn-warning btn-sm" title="Editar cliente">
+                                        <a href="update_coupon.php?id=<?= $Coupon['id'] ?>" 
+                                           class="btn btn-warning btn-sm">
                                            <i class="bi bi-pencil"></i> Editar
                                         </a>
-                                        <a href="../../app/ClientController.php?action=delete&id=<?php echo $client['id']; ?>"
-                                           class="btn btn-danger btn-sm" title="Eliminar cliente"
-                                           onclick="return confirm('¿Estás seguro de que deseas eliminar este cliente?');">
+                                        <a href="coupon.php?action=delete&id=<?= $Coupon['id'] ?>" 
+                                           class="btn btn-danger btn-sm"
+                                           onclick="return confirm('¿Estás seguro de eliminar este cupón?');">
                                            <i class="bi bi-trash"></i> Eliminar
                                         </a>
                                     </div>
-                                </td>
-                            </tr>
-                        <?php endforeach; ?>
-                    </tbody>
-                </table>
+                                </div>
+                            </div>
+                        </div>
+                    <?php endforeach; ?>
+                    </div>
+
+                    </div>
+                </div>
             </div>
-        <?php else: ?>
-            <div class="alert alert-warning text-center" role="alert">
-                <i class="bi bi-exclamation-circle"></i> No se encontraron clientes.
-            </div>
-        <?php endif; ?>
+        </div>
     </div>
 </div>
 
@@ -1043,3 +1042,4 @@ $clients = $ClientController->getclients();
   </body>
   <!-- [Body] end -->
 </html>
+ 

@@ -5,6 +5,8 @@ class UserController
     private $apiUrl = "https://crud.jonathansoto.mx/api/users";
     private $token = '2165|OAdQbuEmRTdNA9YAv8xzkNt4jLNCDhTKhcBehRfV';
 
+    
+
     public function details_user($id)
     {
         $curl = curl_init();
@@ -128,25 +130,6 @@ if (isset($_GET['action'])) {
             }
             break;
 
-        case 'update':
-            if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id'])) {
-                $id = $_POST['id'];
-                $data = [
-                    'name' => $_POST['name'],
-                    'lastname' => $_POST['lastname'],
-                    'email' => $_POST['email'],
-                    'phone_number' => $_POST['phone_number'],
-                    'role' => $_POST['role'],
-                    'password' => $_POST['password']
-                ];
-
-                if ($UserController->editarUsuario($id, $data)) {
-                    header("Location: ../tpm/application/user.php");
-                } else {
-                    echo "Error al actualizar el usuario.";
-                }
-            }
-            break;
 
         case 'delete':
             if (isset($_GET['id'])) {

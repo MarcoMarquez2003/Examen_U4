@@ -138,8 +138,7 @@ if (isset($producto['error']) || empty($producto)) {
             <span class="pc-mtext">Cupones</span><span class="pc-arrow"><i data-feather="chevron-right"></i></span
           ></a>
           <ul class="pc-submenu">
-            <li class="pc-item"><a class="pc-link" href="../application/">Alta de cupones</a></li>
-            <li class="pc-item"><a class="pc-link" href="../application/">Baja de cupones</a></li>
+          <li class="pc-item"><a class="pc-link" href="../application/coupon.php">Cupones</a></li>
           </ul>
         </li>
 

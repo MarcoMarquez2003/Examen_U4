@@ -1,8 +1,21 @@
 <?php
-require_once '../../app/ClientController.php';
+session_start();
+require_once '../../app/CouponController.php';
 
-$ClientController = new ClientController();
-$clients = $ClientController->getclients();
+if (!isset($_GET['id'])) {
+  echo "<h2>No se proporcionó un ID válido.</h2>";
+  exit;
+}
+
+$CouponController = new CouponController();
+$coupon = $CouponController->coupon_details($_GET['id']);
+
+if (!$coupon || !isset($coupon['data'])) {
+  echo "<h2>No se encontró el cupón solicitado.</h2>";
+  exit;
+}
+
+$coupon = $coupon['data'];
 ?>
 <!doctype html>
 <html lang="en">
@@ -144,7 +157,7 @@ $clients = $ClientController->getclients();
           <ul class="pc-submenu">
             <li class="pc-item"><a class="pc-link" href="../application/">CRUD de categorias</a></li>
             <li class="pc-item"><a class="pc-link" href="../application/">CRUD de marcas</a></li>
-            <li class="pc-item"><a class="pc-link" href="../application/>CRUD de tags</a></li>
+            <li class="pc-item"><a class="pc-link" href="../application/">CRUD de tags</a></li>
           </ul>
         </li>
         
@@ -743,67 +756,19 @@ $clients = $ClientController->getclients();
     <!-- [ Main Content ] start -->
     <div class="pc-container">
     <div class="pc-content">
-        <div class="text-center my-5">
-            <h1 class="display-4 text-primary fw-bold">Gestión de Clientes</h1>
-        </div>
-
-        <div class="d-flex justify-content-between align-items-center mb-4">
-            <div>
-            </div>
-            <a href="add_client.php" class="btn btn-success btn-lg shadow-sm">
-                <i class="bi bi-person-plus"></i> Añadir Cliente
-            </a>
-        </div>
-
-        <?php if (is_array($clients) && count($clients) > 0): ?>
-            <div class="table-responsive">
-                <table class="table table-striped table-hover align-middle">
-                    <thead class="table-dark text-center">
-                        <tr>
-                            <th scope="col">ID</th>
-                            <th scope="col">Nombre</th>
-                            <th scope="col">Email</th>
-                            <th scope="col">Teléfono</th>
-                            <th scope="col">Acciones</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php foreach ($clients as $client): ?>
-                            <tr class="text-center">
-                                <td class="fw-bold"><?php echo htmlspecialchars($client['id']); ?></td>
-                                <td><?php echo htmlspecialchars($client['name']); ?></td>
-                                <td><?php echo htmlspecialchars($client['email']); ?></td>
-                                <td><?php echo htmlspecialchars($client['phone_number']); ?></td>
-                                <td>
-                                    <div class="btn-group" role="group">
-                                        <a href="client_details.php?id=<?php echo $client['id']; ?>"
-                                           class="btn btn-info btn-sm" title="Ver detalles">
-                                           <i class="bi bi-eye"></i> Detalles
-                                        </a>
-                                        <a href="client_modificar.php?id=<?php echo $client['id']; ?>"
-                                           class="btn btn-warning btn-sm" title="Editar cliente">
-                                           <i class="bi bi-pencil"></i> Editar
-                                        </a>
-                                        <a href="../../app/ClientController.php?action=delete&id=<?php echo $client['id']; ?>"
-                                           class="btn btn-danger btn-sm" title="Eliminar cliente"
-                                           onclick="return confirm('¿Estás seguro de que deseas eliminar este cliente?');">
-                                           <i class="bi bi-trash"></i> Eliminar
-                                        </a>
-                                    </div>
-                                </td>
-                            </tr>
-                        <?php endforeach; ?>
-                    </tbody>
-                </table>
-            </div>
-        <?php else: ?>
-            <div class="alert alert-warning text-center" role="alert">
-                <i class="bi bi-exclamation-circle"></i> No se encontraron clientes.
-            </div>
-        <?php endif; ?>
+      <div class="card shadow-sm p-3 mb-3 bg-white rounded">
+        <h3 class="card-title"><?= htmlspecialchars($coupon['name']) ?></h3>
+        <p><strong>Código:</strong> <?= htmlspecialchars($coupon['code']) ?></p>
+        <p><strong>Descuento:</strong> <?= htmlspecialchars($coupon['percentage_discount']) ?>%</p>
+        <p><strong>Monto Mínimo:</strong> <?= htmlspecialchars($coupon['min_amount_required']) ?></p>
+        <p><strong>Fecha de Inicio:</strong> <?= htmlspecialchars($coupon['start_date']) ?></p>
+        <p><strong>Fecha de Fin:</strong> <?= htmlspecialchars($coupon['end_date']) ?></p>
+        <p><strong>Usos Máximos:</strong> <?= htmlspecialchars($coupon['max_uses']) ?></p>
+        <p><strong>Estado:</strong> <?= $coupon['status'] == 1 ? 'Activo' : 'Inactivo' ?></p>
+      </div>
+      <a href="coupon.php" class="btn btn-secondary">Volver</a>
     </div>
-</div>
-
+  </div>
     <!-- [ Main Content ] end -->
     <footer class="pc-footer">
       <div class="footer-wrapper container-fluid">
